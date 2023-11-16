@@ -13,8 +13,11 @@ public class Library {
 
 	public	ArrayList<String> indexlist = new ArrayList<String>();
 	public ArrayList<Country> library1 = new ArrayList<Country>();
+	public Hashtable<Integer,Double> yeartemp = new Hashtable<>();
+	public Hashtable<Double, Integer> tempyear = new Hashtable<>();
+	public Country country;
 	
-	public Library () {
+	public Library() {
 	indexlist = createCountryList("C:\\Users\\jboli\\OneDrive\\Desktop\\testcsv.csv");
 	library1 = createLibrary("C:\\Users\\jboli\\OneDrive\\Desktop\\testcsv.csv"); 
 	}
@@ -38,8 +41,8 @@ public class Library {
 			{
 			e.printStackTrace();
 			}
-		indexlist = list;
-		return indexlist;
+		this.indexlist = list;
+		return this.indexlist;
 		}
 	
 	public ArrayList<Country> createLibrary(String filename) {
@@ -48,8 +51,7 @@ public class Library {
 		String line;
 		List <List<String>> data = new ArrayList<>();
 		ArrayList<Country> countrylist = new ArrayList<Country>(); 
-		Hashtable<Integer,Double> yeartemp = new Hashtable<>();
-		Hashtable<Double, Integer> tempyear = new Hashtable<>();
+		
 			
 		try (BufferedReader br = new BufferedReader(new FileReader(file)))
 		{
@@ -57,24 +59,32 @@ public class Library {
 				String[] tokens = line.split(",");
 				data.add(Arrays.asList(tokens));
 				for (int i = 1971, j = 1; i < 2023 && j <63; i++, j++) {
-					yeartemp.put(Integer.valueOf(i), Double.valueOf(tokens[j]));
+					this.yeartemp.put(Integer.valueOf(i), Double.valueOf(tokens[j]));
 					}
 				for (int i = 1971, j = 1; i < 2023 && j < 63; i++, j++) {
-					tempyear.put(Double.valueOf(tokens[j]), Integer.valueOf(i));
+					this.tempyear.put(Double.valueOf(tokens[j]), Integer.valueOf(i));
 					}
-				Country country = new Country(tokens[0], yeartemp, tempyear);
+				this.country = new Country(tokens[0], yeartemp, tempyear);
 				countrylist.add(country);
 			}
 			
-			library1 = countrylist;
+			this.library1 = countrylist;
 			
 		} catch (Exception e) 
 			{
 			e.printStackTrace();
 			}
 		
-		return library1;
+		return this.library1;
 		}
+	
+	public Double getTemp(String country1, Integer year) {
+		
+		int index = indexlist.indexOf(country1);
+		Country country = library1.get(index);
+		Double temp = yeartemp.get(year);
+		return temp;
+	}
 	
 	 public static void main(String[] args) {
 	 }

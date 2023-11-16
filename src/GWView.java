@@ -57,8 +57,6 @@ public class GWView extends JFrame{
 		String[] list = new String[n];
 		for (int i = 0; i<n; i++) {
 			list[i] = june.indexlist.get(i);
-			System.out.println(june.indexlist);
-			System.out.println(june.indexlist.size());
 		}
 		
 		
