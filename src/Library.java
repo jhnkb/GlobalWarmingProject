@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
-public class Library {
+public class Library implements Calculations{
 
 
 	public	ArrayList<String> indexlist = new ArrayList<String>();
@@ -18,8 +18,9 @@ public class Library {
 	public Country country;
 	
 	public Library() {
-	indexlist = createCountryList("C:\\Users\\jboli\\OneDrive\\Desktop\\testcsv.csv");
-	library1 = createLibrary("C:\\Users\\jboli\\OneDrive\\Desktop\\testcsv.csv"); 
+	indexlist = createCountryList("testcsv.csv");
+	library1 = createLibrary("testcsv.csv"); 
+	//"C:\\Users\\jboli\\OneDrive\\Desktop\\testcsv.csv"
 	}
 
 	public ArrayList<String> createCountryList(String filename) {
@@ -56,18 +57,20 @@ public class Library {
 		try (BufferedReader br = new BufferedReader(new FileReader(file)))
 		{
 			while ((line = br.readLine()) != null) {
+				Hashtable<Integer,Double> year = new Hashtable<>();
+				Hashtable<Double,Integer> temp = new Hashtable<>();
 				String[] tokens = line.split(",");
 				data.add(Arrays.asList(tokens));
-				for (int i = 1971, j = 1; i < 2023 && j <63; i++, j++) {
-					this.yeartemp.put(Integer.valueOf(i), Double.valueOf(tokens[j]));
+				for (int i = 1961, j = 1; i < 2023 && j <63; i++, j++) {
+					
+					year.put(Integer.valueOf(i), Double.valueOf(tokens[j]));
+					
+					
+					temp.put(Double.valueOf(tokens[j]), Integer.valueOf(i));
 					}
-				for (int i = 1971, j = 1; i < 2023 && j < 63; i++, j++) {
-					this.tempyear.put(Double.valueOf(tokens[j]), Integer.valueOf(i));
-					}
-				this.country = new Country(tokens[0], yeartemp, tempyear);
+				country = new Country(tokens[0], year, temp);
 				countrylist.add(country);
 			}
-			
 			this.library1 = countrylist;
 			
 		} catch (Exception e) 
@@ -78,16 +81,72 @@ public class Library {
 		return this.library1;
 		}
 	
-	public Double getTemp(String country1, Integer year) {
-		
+	public Double getTemp(String country1, Integer year) {	
 		int index = indexlist.indexOf(country1);
 		Country country = library1.get(index);
-		Double temp = yeartemp.get(year);
+		Double temp = library1.get(index).getyeartemphash().get(year);
 		return temp;
 	}
 	
-	 public static void main(String[] args) {
-	 }
+	public Integer getYear(String country, Double temp) {
+		Integer year = tempyear.get(temp);
+		return year;
+	}
+
+	@Override
+	public Double gethottestTemp() {
+		Double[] arr = new Double[62];
+		
+		for (int i = 1971, j = 0; i < 2023 && j < 63; i++, j++) {
+			arr[j] = yeartemp.get(i);
+		}
+		
+		Double hottesttemp = arr[0];
+		for (int i = 1; i < arr.length; i++) {
+			if (arr[i] > hottesttemp) {
+				hottesttemp = arr[i];
+			}
+		}
+		return hottesttemp;
+	}
+
+	@Override
+	public Double getcoldestTemp() {
+		Double[] arr = new Double[62];
+		
+		for (int i = 1971, j = 0; i < 2023 && j < 63; i++, j++) {
+			arr[j] = yeartemp.get(i);
+		}
+		
+		Double coldesttemp = arr[0];
+		for (int i = 1; i < arr.length; i++) {
+			if (arr[i] < coldesttemp) {
+				coldesttemp = arr[i];
+			}
+		}
+		return coldesttemp;
+	}
+
+	@Override
+	public int getDoubleRate() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTripleRate() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double tempDifference(String country, Integer year1, Integer year2) {
+		Double temp1 = getTemp(country, year1);
+		Double temp2 = getTemp(country, year2);
+		
+		Double difference = Math.abs(temp1-temp2);
+		return difference;
+	}
 	
 
 }

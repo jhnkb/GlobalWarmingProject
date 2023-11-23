@@ -14,5 +14,15 @@ public class Country {
 		this.yeartemp = yeartemp2;
 		this.tempyear = tempyear2;
 	}
+
+	public Hashtable<Integer, Double> getyeartemphash() {
+		return this.yeartemp;
+	}
+	public Hashtable<Double, Integer> gettempyearhash() {
+		return this.tempyear;
+	}
 	
+	public String getName() {
+		return this.name;
+	}
 }
