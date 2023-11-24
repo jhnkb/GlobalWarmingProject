@@ -2,15 +2,12 @@
 
 public interface Calculations {
 	
-	public Double gethottestTemp();
+	public Double gethottestTemp(String country);
 	
-	public Double getcoldestTemp();
+	public Double getcoldestTemp(String country);
 	
-	public int getDoubleRate();
-	
-	public int getTripleRate();
+	public Double getpercentChange (String country, Integer year1, Integer year2);
 
 	public double tempDifference(String country, Integer year1, Integer year2);
-	
-	
+
 }

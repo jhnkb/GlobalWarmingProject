@@ -83,22 +83,26 @@ public class Library implements Calculations{
 	
 	public Double getTemp(String country1, Integer year) {	
 		int index = indexlist.indexOf(country1);
-		Country country = library1.get(index);
 		Double temp = library1.get(index).getyeartemphash().get(year);
 		return temp;
 	}
 	
 	public Integer getYear(String country, Double temp) {
-		Integer year = tempyear.get(temp);
+		int index = indexlist.indexOf(country);
+		Integer year = library1.get(index).gettempyearhash().get(temp);
 		return year;
 	}
 
 	@Override
-	public Double gethottestTemp() {
+	public Double gethottestTemp(String country) {
+		int index = indexlist.indexOf(country);
+		Country country1 = library1.get(index);
 		Double[] arr = new Double[62];
+
 		
-		for (int i = 1971, j = 0; i < 2023 && j < 63; i++, j++) {
-			arr[j] = yeartemp.get(i);
+		for (int i = 1961, j = 0; i < 2023 && j < 63; i++, j++) {
+			arr[j] = country1.getyeartemphash().get(i);
+			
 		}
 		
 		Double hottesttemp = arr[0];
@@ -111,11 +115,14 @@ public class Library implements Calculations{
 	}
 
 	@Override
-	public Double getcoldestTemp() {
+	public Double getcoldestTemp(String country) {
+		int index = indexlist.indexOf(country);
+		Country country1 = library1.get(index);
 		Double[] arr = new Double[62];
 		
-		for (int i = 1971, j = 0; i < 2023 && j < 63; i++, j++) {
-			arr[j] = yeartemp.get(i);
+		
+		for (int i = 1961, j = 0; i < 2023 && j < 63; i++, j++) {
+			arr[j] = country1.getyeartemphash().get(i);
 		}
 		
 		Double coldesttemp = arr[0];
@@ -128,15 +135,15 @@ public class Library implements Calculations{
 	}
 
 	@Override
-	public int getDoubleRate() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getTripleRate() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Double getpercentChange (String country, Integer year1, Integer year2) {
+		
+		Double temp1 = getTemp(country, year1);
+		Double temp2 = getTemp(country, year2);
+		
+		Double change = ((temp1-temp2)/temp1)*100;
+		
+		
+		return change;
 	}
 
 	@Override
