@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -18,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.border.Border;
+import javax.swing.ImageIcon;
 
 
 public class GWView extends JFrame{
@@ -27,12 +29,13 @@ public class GWView extends JFrame{
 	private JPanel rightPanel;
 	private JPanel mainPanel;
 	private JComboBox comboBox;
-	GridBagConstraints gbc = new GridBagConstraints();
+	private ImageIcon image1;
+
 
 	public GWView() {
 	
 		super("Global Warming");
-		setSize(500, 500);
+		setSize(1000, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		mainPanel = new JPanel();
@@ -43,13 +46,11 @@ public class GWView extends JFrame{
 		
 		createleftPanel();
 		
-		
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		add(leftPanel, BorderLayout.WEST);
 		leftPanel.setBorder(blackline);
 		add(centerPanel, BorderLayout.CENTER);
 		add(rightPanel, BorderLayout.EAST);
-		
 		
 		setVisible(true);
 	
@@ -59,24 +60,16 @@ public class GWView extends JFrame{
 		
 		//create top panel
 		JPanel panel1 = new JPanel();
-		
+		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
 		
 		//create center panel
 		JPanel panel2 = new JPanel();
-		panel2.setLayout(new GridBagLayout());
-		
-		//create bottom panel
-		JPanel panel3 = new JPanel();
-		
-		
 		
 		//PANEL 1
 		JLabel title = new JLabel("TEMPERATURE DIFFERENCE CALCULATOR BY YEAR");
 		title.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		title.setAlignmentX(CENTER_ALIGNMENT);
-		
-		//PANEL 2
-		JLabel instruction = new JLabel("Pick a Country:");
+		JLabel instruction = new JLabel("Pick a Country or Territory:");
 		instruction.setAlignmentX(CENTER_ALIGNMENT);
 		JLabel year1 = new JLabel("Year 1");
 		year1.setAlignmentX(CENTER_ALIGNMENT);
@@ -87,9 +80,6 @@ public class GWView extends JFrame{
 		field1.setPreferredSize(new Dimension (100, 30));
 		JTextField field2 = new JTextField();
 		field2.setPreferredSize(new Dimension (100,30));
-		
-//		BoxLayout layout = new BoxLayout(leftPanel, BoxLayout.Y_AXIS);
-//		leftPanel.setLayout(layout);
 		
 		//get string array of all countries
 		//using library object
@@ -106,35 +96,22 @@ public class GWView extends JFrame{
 		 
 		 **/
 		
+		panel1.add(title);
 		
-		panel1.add(title, BorderLayout.CENTER);
+		panel1.add(instruction);
 		
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		panel2.add(instruction, gbc);
+		panel1.add(comboBox);
+	
+		panel1.add(year1);
+	
+		panel1.add(field1);
 		
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		panel2.add(comboBox, gbc);
+		panel1.add(year2);
 		
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		panel2.add(year1, gbc);
-		
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		panel2.add(field1, gbc);
-		
-		gbc.gridx = 0;
-		gbc.gridy = 4;
-		panel2.add(year2, gbc);
-		
-		gbc.gridx = 0;
-		gbc.gridy = 5;
-		panel2.add(field2, gbc);
+		panel1.add(field2);
 		
 		leftPanel.add(panel1);
-		leftPanel.add(panel2);
+	
 		
 	}
 	

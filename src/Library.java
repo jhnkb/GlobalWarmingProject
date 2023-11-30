@@ -18,14 +18,15 @@ public class Library implements Calculations{
 	public Country country;
 	
 	public Library() {
-	indexlist = createCountryList("testcsv.csv");
-	library1 = createLibrary("testcsv.csv"); 
+	indexlist = createCountryList("C:/Users/jboli/OneDrive/Desktop/testcsv - Copy.csv", "C://Users//jboli//OneDrive//Desktop//islands.csv/");
+	library1 = createLibrary("C:/Users/jboli/OneDrive/Desktop/testcsv - Copy.csv", "C://Users//jboli//OneDrive//Desktop//islands.csv/"); 
 	//"C:\\Users\\jboli\\OneDrive\\Desktop\\testcsv.csv"
 	}
 
-	public ArrayList<String> createCountryList(String filename) {
+	public ArrayList<String> createCountryList(String countryfile, String islandfile) {
 		
-		File file = new File(filename);
+		File file = new File(countryfile);
+		File file2 = new File(islandfile);
 		String line;
 		List <List<String>> data = new ArrayList<>(); 
 		ArrayList<String> list = new ArrayList<String>();
@@ -42,13 +43,27 @@ public class Library implements Calculations{
 			{
 			e.printStackTrace();
 			}
+		
+		try (BufferedReader br = new BufferedReader(new FileReader(file2)))
+		{
+			while ((line = br.readLine()) != null) {
+				String[] tokens = line.split(",");
+				data.add(Arrays.asList(tokens));
+				list.add(tokens[0]);
+				 
+			}
+		} catch (Exception e) 
+			{
+			e.printStackTrace();
+			}
 		this.indexlist = list;
-		return this.indexlist;
+		return indexlist;
 		}
 	
-	public ArrayList<Country> createLibrary(String filename) {
+	public ArrayList<Country> createLibrary(String countryfile, String islandfile) {
 		
-		File file = new File(filename);
+		File file = new File(countryfile);
+		File file2 = new File(islandfile);
 		String line;
 		List <List<String>> data = new ArrayList<>();
 		ArrayList<Country> countrylist = new ArrayList<Country>(); 
@@ -71,13 +86,33 @@ public class Library implements Calculations{
 				country = new Country(tokens[0], year, temp);
 				countrylist.add(country);
 			}
-			this.library1 = countrylist;
-			
 		} catch (Exception e) 
 			{
 			e.printStackTrace();
 			}
 		
+		try (BufferedReader br = new BufferedReader(new FileReader(file2)))
+		{
+			while ((line = br.readLine()) != null) {
+				Hashtable<Integer,Double> year = new Hashtable<>();
+				Hashtable<Double,Integer> temp = new Hashtable<>();
+				String[] tokens = line.split(",");
+				data.add(Arrays.asList(tokens));
+				for (int i = 1961, j = 1; i < 2023 && j <63; i++, j++) {
+					
+					year.put(Integer.valueOf(i), Double.valueOf(tokens[j]));
+					
+					
+					temp.put(Double.valueOf(tokens[j]), Integer.valueOf(i));
+					}
+				country = new Country(tokens[0], year, temp);
+				countrylist.add(country);
+			}
+		} catch (Exception e) 
+			{
+			e.printStackTrace();
+			}
+		this.library1 = countrylist;
 		return this.library1;
 		}
 	
