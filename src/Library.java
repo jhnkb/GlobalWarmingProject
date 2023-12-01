@@ -189,6 +189,18 @@ public class Library implements Calculations{
 		Double difference = Math.abs(temp1-temp2);
 		return difference;
 	}
+
+	@Override
+	public Double converttoC(Double temp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Double converttoF(Double temp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 }

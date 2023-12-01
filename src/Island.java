@@ -11,7 +11,4 @@ public class Island extends Country{
 		this.yeartemp = yeartemp2;
 		this.tempyear = tempyear2;
 	}
-
-	
-
 }
