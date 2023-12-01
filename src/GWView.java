@@ -114,7 +114,7 @@ public class GWView extends JFrame{
 		JRadioButton radio1 = new JRadioButton();
 		JLabel celsius = new JLabel("Convert to Celsius");
 		JRadioButton radio2 = new JRadioButton();
-		JLabel farenheit = new JLabel("Convert to Farenheit");
+		JLabel fahrenheit = new JLabel("Convert to Fahrenheit");
 		
 		panel1.add(title);
 		
@@ -145,7 +145,7 @@ public class GWView extends JFrame{
 		panel4.add(radio1);
 		panel4.add(celsius);
 		panel4.add(radio2);
-		panel4.add(farenheit);
+		panel4.add(fahrenheit);
 		
 		leftPanel.add(panel1);
 		
