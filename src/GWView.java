@@ -9,6 +9,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -32,14 +34,20 @@ public class GWView extends JFrame{
 	private JPanel centerPanel;
 	private JPanel rightPanel;
 	private JPanel mainPanel;
+	private JRadioButton radio1;
+	private JRadioButton radio2;
 	private JComboBox comboBox;
 	private ImageIcon islandimage;
-	private Double tempdiff = 0.0;
+	
 	private Integer yearhot = 0000;
 	private Integer yearcold = 0000;
 	private Double hottesttemp = 0.0;
 	private Double coldesttemp = 0.0;
 	private Double ratediff;
+	private JLabel differencenumber;
+	private Double tempdiff;
+	private Library library = new Library();
+	
 	
 	
 
@@ -47,7 +55,7 @@ public class GWView extends JFrame{
 		
 		
 		super("Global Warming");
-		setSize(1450, 340);
+		setSize(1450, 400);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		leftPanel = new JPanel();
@@ -76,8 +84,10 @@ public class GWView extends JFrame{
 	private void createleftPanel() {
 		
 		
-		islandimage = new ImageIcon();
+		islandimage = new ImageIcon(getClass().getResource("islandimage.png"));
 		JLabel image = new JLabel(islandimage);
+		
+		JLabel caption = new JLabel("This country or territory is comprised of island(s)");
 	
 		JPanel panel1 = new JPanel();
 		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
@@ -88,6 +98,9 @@ public class GWView extends JFrame{
 		panel3.setLayout(new FlowLayout());
 		
 		JPanel panel4 = new JPanel();
+		
+		JPanel panel5 = new JPanel();
+		panel5.setLayout(new FlowLayout());
 		
 		//PANEL 1
 		JLabel title = new JLabel("TEMPERATURE DIFFERENCE CALCULATOR BY YEAR");
@@ -119,15 +132,35 @@ public class GWView extends JFrame{
 		
 		//PANEL 2
 		JButton submit = new JButton("SUBMIT");
+		submit.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String place = (String) comboBox.getSelectedItem();
+				Integer year1 = Integer.valueOf(field1.getText());
+				Integer year2 = Integer.valueOf(field2.getText());
+				
+				Double temp1 = library.getTemp(place, year1);
+				Double temp2 = library.getTemp(place, year2);
+				tempdiff = temp1 - temp2;
+				
+				differencenumber.setText(String.valueOf(tempdiff));
+				
+				if radio1.isSelected() {
+					
+				}
+			}
+			
+		});
 		
 		//PANEL 3
 		JLabel difference = new JLabel("Difference in temperature:");
-		JLabel differencenumber = new JLabel(String.valueOf(tempdiff));
+		differencenumber = new JLabel(String.valueOf(tempdiff));
 		
 		//PANEL 4 - for radio buttons
-		JRadioButton radio1 = new JRadioButton();
+		radio1 = new JRadioButton();
 		JLabel celsius = new JLabel("Show in Celsius");
-		JRadioButton radio2 = new JRadioButton();
+		radio2 = new JRadioButton();
 		JLabel fahrenheit = new JLabel("Show in Fahrenheit");
 		
 		panel1.add(title);
@@ -137,6 +170,8 @@ public class GWView extends JFrame{
 		panel1.add(instruction);
 		
 		panel1.add(comboBox);
+		
+		panel1.add(panel5);
 		
 		panel1.add(instruction2);
 	
@@ -164,7 +199,10 @@ public class GWView extends JFrame{
 		panel4.add(celsius);
 		panel4.add(radio2);
 		panel4.add(fahrenheit);
-		panel4.add(image);
+		panel5.add(image);
+		panel5.add(caption);
+		
+		
 		
 		leftPanel.add(panel1);
 		
@@ -281,7 +319,13 @@ public class GWView extends JFrame{
 		panel1.add(Box.createRigidArea(new Dimension(10,10)));
 		panel1.add(submit);
 		
+		
+		
 		rightPanel.add(panel1);
+	}
+	
+	public void updateUI() {
+		
 	}
 	
 	public static void main(String[] args)

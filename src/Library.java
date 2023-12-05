@@ -19,8 +19,8 @@ public class Library implements Calculations{
 	public Island island;
 	
 	public Library() {
-	indexlist = createCountryList("C:/Users/jboli/OneDrive/Desktop/testcsv - Copy.csv", "C://Users//jboli//OneDrive//Desktop//islands.csv/");
-	library1 = createLibrary("C:/Users/jboli/OneDrive/Desktop/testcsv - Copy.csv", "C://Users//jboli//OneDrive//Desktop//islands.csv/"); 
+	indexlist = createCountryList("countries.csv", "islands.csv");
+	library1 = createLibrary("countries.csv", "islands.csv"); 
 	}
 
 	public ArrayList<String> createCountryList(String countryfile, String islandfile) {
@@ -182,7 +182,7 @@ public class Library implements Calculations{
 	}
 
 	@Override
-	public double tempDifference(String country, Integer year1, Integer year2) {
+	public Double tempDifference(String country, Integer year1, Integer year2) {
 		Double temp1 = getTemp(country, year1);
 		Double temp2 = getTemp(country, year2);
 		
