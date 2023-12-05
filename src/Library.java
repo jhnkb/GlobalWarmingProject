@@ -16,11 +16,11 @@ public class Library implements Calculations{
 	public Hashtable<Integer,Double> yeartemp = new Hashtable<>();
 	public Hashtable<Double, Integer> tempyear = new Hashtable<>();
 	public Country country;
+	public Island island;
 	
 	public Library() {
 	indexlist = createCountryList("C:/Users/jboli/OneDrive/Desktop/testcsv - Copy.csv", "C://Users//jboli//OneDrive//Desktop//islands.csv/");
 	library1 = createLibrary("C:/Users/jboli/OneDrive/Desktop/testcsv - Copy.csv", "C://Users//jboli//OneDrive//Desktop//islands.csv/"); 
-	//"C:\\Users\\jboli\\OneDrive\\Desktop\\testcsv.csv"
 	}
 
 	public ArrayList<String> createCountryList(String countryfile, String islandfile) {
@@ -105,8 +105,8 @@ public class Library implements Calculations{
 					
 					temp.put(Double.valueOf(tokens[j]), Integer.valueOf(i));
 					}
-				country = new Country(tokens[0], year, temp);
-				countrylist.add(country);
+				island = new Island(tokens[0], year, temp);
+				countrylist.add(island);
 			}
 		} catch (Exception e) 
 			{
@@ -191,15 +191,17 @@ public class Library implements Calculations{
 	}
 
 	@Override
-	public Double converttoC(Double temp) {
-		// TODO Auto-generated method stub
-		return null;
+	public Double converttoF(Double temp) {
+		Double far;
+		far = (temp * (9/5)) + 32;
+		return far;
 	}
 
 	@Override
-	public Double converttoF(Double temp) {
-		// TODO Auto-generated method stub
-		return null;
+	public Double converttoC(Double temp) {
+		Double cel;
+		cel = (temp - 32) * (9/5);
+		return cel;
 	}
 	
 

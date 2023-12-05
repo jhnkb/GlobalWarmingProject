@@ -33,7 +33,7 @@ public class GWView extends JFrame{
 	private JPanel rightPanel;
 	private JPanel mainPanel;
 	private JComboBox comboBox;
-	private ImageIcon image1;
+	private ImageIcon islandimage;
 	private Double tempdiff = 0.0;
 	private Integer yearhot = 0000;
 	private Integer yearcold = 0000;
@@ -41,9 +41,10 @@ public class GWView extends JFrame{
 	private Double coldesttemp = 0.0;
 	private Double ratediff;
 	
-
+	
 
 	public GWView() {
+		
 		
 		super("Global Warming");
 		setSize(1450, 340);
@@ -66,13 +67,17 @@ public class GWView extends JFrame{
 		add(centerPanel, BorderLayout.CENTER);
 		centerPanel.setBorder(blackline);
 		add(rightPanel, BorderLayout.EAST);
-		
+		rightPanel.setBorder(blackline);
 		
 		setVisible(true);
 	
 	}
 	
 	private void createleftPanel() {
+		
+		
+		islandimage = new ImageIcon();
+		JLabel image = new JLabel(islandimage);
 	
 		JPanel panel1 = new JPanel();
 		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
@@ -159,6 +164,7 @@ public class GWView extends JFrame{
 		panel4.add(celsius);
 		panel4.add(radio2);
 		panel4.add(fahrenheit);
+		panel4.add(image);
 		
 		leftPanel.add(panel1);
 		
@@ -241,7 +247,7 @@ public class GWView extends JFrame{
 		instruction.setAlignmentX(CENTER_ALIGNMENT);
 		JLabel instruction2 = new JLabel("Enter years between 1961 and 2022");
 		instruction2.setAlignmentX(CENTER_ALIGNMENT);
-		JLabel instruction3 = new JLabel("This will calculate the temperature rate increase or decrease between both years.");
+		JLabel instruction3 = new JLabel("(This will calculate the temperature rate increase or decrease between both years.)");
 		instruction3.setAlignmentX(CENTER_ALIGNMENT);
 		JLabel year1 = new JLabel("Year 1");
 		year1.setAlignmentX(CENTER_ALIGNMENT);

@@ -8,7 +8,7 @@ public interface Calculations {
 	
 	public Double getpercentChange (String country, Integer year1, Integer year2);
 
-	public double tempDifference(String country, Integer year1, Integer year2);
+	public Double tempDifference(String country, Integer year1, Integer year2);
 	
 	public Double converttoC(Double temp);
 	
