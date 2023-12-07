@@ -11,13 +11,17 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
@@ -37,7 +41,9 @@ public class GWView extends JFrame{
 	private JRadioButton radio1;
 	private JRadioButton radio2;
 	private JComboBox comboBox;
+	private JComboBox comboBox2;
 	private ImageIcon islandimage;
+	
 	
 	private Integer yearhot = 0000;
 	private Integer yearcold = 0000;
@@ -45,7 +51,8 @@ public class GWView extends JFrame{
 	private Double coldesttemp = 0.0;
 	private Double ratediff;
 	private JLabel differencenumber;
-	private Double tempdiff;
+	private Double maintempdiff;
+	private String place;
 	private Library library = new Library();
 	
 	
@@ -82,6 +89,7 @@ public class GWView extends JFrame{
 	}
 	
 	private void createleftPanel() {
+		
 		
 		
 		islandimage = new ImageIcon(getClass().getResource("islandimage.png"));
@@ -128,40 +136,64 @@ public class GWView extends JFrame{
 		for (int i = 0; i<n; i++) {
 			list[i] = june.indexlist.get(i);
 		}
+		
+		
 		comboBox = new JComboBox(list);
+		comboBox.addItemListener(new ItemListener()
+		{
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+		        // This method will be called when the selected item in the combo box changes
+		        if (e.getStateChange() == ItemEvent.SELECTED) {
+		            // Update the 'place' variable with the newly selected place
+		            place = String.valueOf(comboBox.getSelectedItem());
+		            System.out.println(place);
+		            // You may choose to perform additional actions here based on the selected item
+		            // For example, update other UI components or perform calculations
+		        }
+		    }
+		});
 		
 		//PANEL 2
 		JButton submit = new JButton("SUBMIT");
 		submit.addActionListener(new ActionListener(){
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				String place = (String) comboBox.getSelectedItem();
+			public void actionPerformed(ActionEvent e)  {
+				place = comboBox.getSelectedItem().toString();
+				System.out.println(place);
 				Integer year1 = Integer.valueOf(field1.getText());
 				Integer year2 = Integer.valueOf(field2.getText());
 				
-				Double temp1 = library.getTemp(place, year1);
-				Double temp2 = library.getTemp(place, year2);
-				tempdiff = temp1 - temp2;
-				
-				differencenumber.setText(String.valueOf(tempdiff));
-				
-				if radio1.isSelected() {
-					
+				if (year1 > 2022 || year1 < 1961 || year2 > 2022|| year2 < 1961 || field1.getText() == "" || field2.getText() == "" || year1 == null || year2 == null) {
+					String error = "INVALID YEARS ENTERED. PLEASE ENTER ONLY YEARS 1961 TO 2022";
+					JOptionPane.showMessageDialog(null, error);
+					System.exit(0);
 				}
+				
+				maintempdiff = library.getTemp(place, year1) - library.getTemp(place, year2);
+				
+				if (radio2.isSelected()) {
+					maintempdiff = (maintempdiff * (9/5)) + 32;
+				}
+				
+				differencenumber.setText(String.valueOf(maintempdiff));
 			}
 			
 		});
 		
 		//PANEL 3
 		JLabel difference = new JLabel("Difference in temperature:");
-		differencenumber = new JLabel(String.valueOf(tempdiff));
+		differencenumber = new JLabel(String.valueOf(maintempdiff));
 		
 		//PANEL 4 - for radio buttons
 		radio1 = new JRadioButton();
 		JLabel celsius = new JLabel("Show in Celsius");
 		radio2 = new JRadioButton();
 		JLabel fahrenheit = new JLabel("Show in Fahrenheit");
+		ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup.add(radio1);
+		buttonGroup.add(radio2);
 		
 		panel1.add(title);
 		
@@ -276,7 +308,7 @@ public class GWView extends JFrame{
 		for (int i = 0; i<n; i++) {
 			list[i] = june.indexlist.get(i);
 		}
-		comboBox = new JComboBox(list);
+		comboBox2 = new JComboBox(list);
 		
 		JLabel title = new JLabel("TEMPERATURE RATE CALCULATOR BY COUNTRY OR TERRITORY");
 		title.setFont(new Font("Times New Roman", Font.BOLD, 15));
@@ -306,7 +338,7 @@ public class GWView extends JFrame{
 		panel1.add(title);
 		panel1.add(Box.createRigidArea(new Dimension(0,10)));
 		panel1.add(instruction);
-		panel1.add(comboBox);
+		panel1.add(comboBox2);
 		panel1.add(instruction2);
 		panel1.add(instruction3);
 		panel1.add(year1);
@@ -324,9 +356,7 @@ public class GWView extends JFrame{
 		rightPanel.add(panel1);
 	}
 	
-	public void updateUI() {
-		
-	}
+	
 	
 	public static void main(String[] args)
 	   {
@@ -334,5 +364,8 @@ public class GWView extends JFrame{
 		  GWView view = new GWView();
 		  
 	   }
+
+
+	
 	
 }
