@@ -5,17 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -23,12 +14,9 @@ import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -293,7 +281,7 @@ public class GWView extends JFrame {
 		        int year2 = Integer.parseInt(field2.getText());
 
 		        boolean validInput = isValidYear(year1) && isValidYear(year2) &&
-		                !field1.getText().trim().isEmpty() && !field2.getText().trim().isEmpty();
+		                !field1.getText().isEmpty() && !field2.getText().isEmpty();
 
 		        submit.setEnabled(validInput);
 		    } catch (NumberFormatException e) {
