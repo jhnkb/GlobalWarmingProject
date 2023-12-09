@@ -11,6 +11,8 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -45,12 +47,13 @@ public class GWView extends JFrame {
 	private JComboBox comboBox;
 	private JComboBox comboBox2;
 	private ImageIcon islandimage;
+	private ImageIcon islandimagebw;
 	
 	
-	private Integer yearhot = 0000;
-	private Integer yearcold = 0000;
-	private Double hottesttemp = 0.0;
-	private Double coldesttemp = 0.0;
+	private Integer yearhot;
+	private Integer yearcold;
+	private Double hottesttemp ;
+	private Double coldesttemp ;
 	private Double ratediff;
 	private JLabel differencenumber;
 	private Double maintempdiff;
@@ -96,12 +99,11 @@ public class GWView extends JFrame {
 	
 	private void createleftPanel() {
 		
-		
-		
 		islandimage = new ImageIcon(getClass().getResource("islandimage.png"));
+		islandimagebw = new ImageIcon(getClass().getResource("islandimagebw.png"));
 		JLabel image = new JLabel(islandimage);
 		
-		JLabel caption = new JLabel("This country or territory is comprised of island(s)");
+		JLabel caption = new JLabel("This country or territory is an island nation/territory");
 	
 		JPanel panel1 = new JPanel();
 		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
@@ -129,9 +131,9 @@ public class GWView extends JFrame {
 		JLabel year2 = new JLabel("Year 2");
 		year2.setAlignmentX(CENTER_ALIGNMENT);
 		
-		field1 = new JTextField("0000");
+		field1 = new JTextField("");
 		field1.setPreferredSize(new Dimension (100, 30));
-		field2 = new JTextField("0000");
+		field2 = new JTextField("");
 		field2.setPreferredSize(new Dimension (100,30));
 		
 		 field1.getDocument().addDocumentListener(new DocumentListener() {
@@ -150,8 +152,8 @@ public class GWView extends JFrame {
 		            
 		        }
 		    });
-
-		    field2.getDocument().addDocumentListener(new DocumentListener() {
+		 
+		 field2.getDocument().addDocumentListener(new DocumentListener() {
 		        @Override
 		        public void insertUpdate(DocumentEvent e) {
 		            updateSubmitButtonState();
@@ -167,7 +169,6 @@ public class GWView extends JFrame {
 		            
 		        }
 		    });
-		
 
 		//get string array of all countries
 		//using library object
@@ -180,36 +181,44 @@ public class GWView extends JFrame {
 		comboBox = new JComboBox(list);
 		place = list[0];
 		
+		
 		comboBox.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				if(e.getSource()== comboBox) {
 					place = (String) comboBox.getSelectedItem();
+					int index = library.indexlist.indexOf(place);
+//					Country test = library.getCountry(index);
+					if (library.getCountry(index).getClass() != Island.class) {
+						image.setIcon(islandimagebw);
+						caption.setText("This country or territory is not an island nation/territory");
+					}
+					else {
+						image.setIcon(islandimage);
+						caption.setText("This country or territory is an island nation/territory");
+					}
 				}
 			}
 		});
 		
 		
 		submit = new JButton("SUBMIT");
+		submit.setEnabled(false);
 		submit.addActionListener(new ActionListener(){
 		
 			@Override
 			public void actionPerformed(ActionEvent e)  {
 				System.out.println(place);
+				
 				Integer year1 = Integer.valueOf(field1.getText());
 				Integer year2 = Integer.valueOf(field2.getText());
 				
-				if (year1 != null && year2 != null) {
-					maintempdiff = library.getTemp(place, year1) - library.getTemp(place, year2);
+				if (!isValidYear(year1) || !isValidYear(year2)) {
+					submit.setEnabled(false);
+					}else {
+						maintempdiff = library.getTemp(place, year1) - library.getTemp(place, year2);
 					}
-					else {
-						String error = "PLEASE ENTE";
-						JOptionPane.showMessageDialog(null, error);
-					}
-				if (year1 > 2022 || year1 < 1961 || year2 > 2022|| year2 < 1961 || field1.getText() == "" || String.valueOf(year2) == "" || year1 == null || year2 == null) {
-					String error = "INVALID YEARS ENTERED. PLEASE ENTER ONLY YEARS 1961 TO 2022";
-					JOptionPane.showMessageDialog(null, error);
-				}
 				
 				if (radio2.isSelected()) {
 					maintempdiff = (maintempdiff * (9/5)) + 32;
@@ -231,6 +240,7 @@ public class GWView extends JFrame {
 		JLabel fahrenheit = new JLabel("Show in Fahrenheit");
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(radio1);
+		radio1.setSelected(true);
 		buttonGroup.add(radio2);
 		
 		panel1.add(title);
@@ -252,8 +262,6 @@ public class GWView extends JFrame {
 		panel1.add(year2);
 		
 		panel1.add(field2);
-		
-		
 		
 		panel1.add(panel3);
 		
@@ -278,137 +286,30 @@ public class GWView extends JFrame {
 		
 	}
 	
-//	private void createmiddlePanel() {
-//		
-//		Library june = new Library();
-//		int n = june.indexlist.size();
-//		String[] list = new String[n];
-//		for (int i = 0; i<n; i++) {
-//			list[i] = june.indexlist.get(i);
-//		}
-//		comboBox = new JComboBox(list);
-//		
-//		
-//		JLabel title = new JLabel("HOTTEST AND COLDEST YEAR BY COUNTRY OR TERRITORY");
-//		title.setFont(new Font("Times New Roman", Font.BOLD, 15));
-//		title.setAlignmentX(CENTER_ALIGNMENT);
-//		JLabel instruction = new JLabel("Pick a Country or Territory:");
-//		instruction.setAlignmentX(CENTER_ALIGNMENT);
-//		JLabel hottemp = new JLabel("Hottest Temperature: " + String.valueOf(hottesttemp));
-//		hottemp.setAlignmentX(CENTER_ALIGNMENT);
-//		JLabel year = new JLabel("in the year of "+String.valueOf(yearhot));
-//		year.setAlignmentX(CENTER_ALIGNMENT);
-//		JLabel coldtemp = new JLabel("Coldest Temperature: " + String.valueOf(coldesttemp));
-//		coldtemp.setAlignmentX(CENTER_ALIGNMENT);
-//		JLabel year1 = new JLabel(String.valueOf("in the year of "+ String.valueOf(yearcold)));
-//		year1.setAlignmentX(CENTER_ALIGNMENT);
-//		JButton submit = new JButton("SUBMIT");
-//		submit.setAlignmentX(CENTER_ALIGNMENT);
-//		JRadioButton radio1 = new JRadioButton();
-//		JLabel celsius = new JLabel("Show in Celsius");
-//		JRadioButton radio2 = new JRadioButton();
-//		JLabel fahrenheit = new JLabel("Show in Fahrenheit");
-//		
-//		JPanel panel1 = new JPanel();
-//		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
-//		
-//		JPanel panel2 = new JPanel();
-//		JPanel panel3 = new JPanel();
-//		
-//		panel1.add(title);	
-//		panel1.add(Box.createRigidArea(new Dimension(0,10)));
-//		panel1.add(instruction);
-//		panel1.add(comboBox);
-//		
-//		panel2.add(radio1);
-//		panel2.add(celsius);
-//		panel3.add(radio2);
-//		panel3.add(fahrenheit);
-//		panel1.add(panel2);
-//		panel1.add(panel3);
-//		panel1.add(Box.createRigidArea(new Dimension(0,10)));
-//		panel1.add(hottemp);
-//		panel1.add(year);
-//		panel1.add(coldtemp);
-//		panel1.add(year1);
-//		panel1.add(Box.createRigidArea(new Dimension(0,15)));
-//		panel1.add(submit);
-//		
-//		centerPanel.add(panel1);
-//
-//	}
-//	
-//	private void createrightPanel() {
-//		
-//		Library june = new Library();
-//		int n = june.indexlist.size();
-//		String[] list = new String[n];
-//		for (int i = 0; i<n; i++) {
-//			list[i] = june.indexlist.get(i);
-//		}
-//		comboBox2 = new JComboBox(list);
-//		
-//		JLabel title = new JLabel("TEMPERATURE RATE CALCULATOR BY COUNTRY OR TERRITORY");
-//		title.setFont(new Font("Times New Roman", Font.BOLD, 15));
-//		title.setAlignmentX(CENTER_ALIGNMENT);
-//		JLabel instruction = new JLabel("Pick a Country or Territory:");
-//		instruction.setAlignmentX(CENTER_ALIGNMENT);
-//		JLabel instruction2 = new JLabel("Enter years between 1961 and 2022");
-//		instruction2.setAlignmentX(CENTER_ALIGNMENT);
-//		JLabel instruction3 = new JLabel("(This will calculate the temperature rate increase or decrease between both years.)");
-//		instruction3.setAlignmentX(CENTER_ALIGNMENT);
-//		JLabel year1 = new JLabel("Year 1");
-//		year1.setAlignmentX(CENTER_ALIGNMENT);
-//		JLabel year2 = new JLabel("Year 2");
-//		year2.setAlignmentX(CENTER_ALIGNMENT);
-//		JTextField field1 = new JTextField();
-//		field1.setPreferredSize(new Dimension (70, 30));
-//		JTextField field2 = new JTextField();
-//		field2.setPreferredSize(new Dimension (70,30));
-//		JLabel rate = new JLabel("The rate increase or decrease is " + String.valueOf(ratediff) + "%" );
-//		rate.setAlignmentX(CENTER_ALIGNMENT);
-//		JButton submit = new JButton("SUBMIT");
-//		submit.setAlignmentX(CENTER_ALIGNMENT);
-//		
-//		JPanel panel1 = new JPanel();
-//		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
-//		
-//		panel1.add(title);
-//		panel1.add(Box.createRigidArea(new Dimension(0,10)));
-//		panel1.add(instruction);
-//		panel1.add(comboBox2);
-//		panel1.add(instruction2);
-//		panel1.add(instruction3);
-//		panel1.add(year1);
-//		panel1.add(field1);
-//		panel1.add(year2);
-//		panel1.add(field2);
-//		
-//		panel1.add(Box.createRigidArea(new Dimension(10,10)));
-//		panel1.add(rate);
-//		panel1.add(Box.createRigidArea(new Dimension(10,10)));
-//		panel1.add(submit);
-//		
-//		
-//		
-//		rightPanel.add(panel1);
-//	}
-	
 	private void updateSubmitButtonState() {
-	    String text1 = field1.getText().trim();
-	    String text2 = field2.getText().trim();
-	    
-	    // Enable the submit button if both fields are not empty
-	    submit.setEnabled(!text1.isEmpty() && !text2.isEmpty());
+		
+		 try {
+		        int year1 = Integer.parseInt(field1.getText());
+		        int year2 = Integer.parseInt(field2.getText());
+
+		        boolean validInput = isValidYear(year1) && isValidYear(year2) &&
+		                !field1.getText().trim().isEmpty() && !field2.getText().trim().isEmpty();
+
+		        submit.setEnabled(validInput);
+		    } catch (NumberFormatException e) {
+		        // Handle the case where the input is not a valid integer
+		        submit.setEnabled(false);
+		    }
+		
 	}
 	
-	
-	
+	private boolean isValidYear(Integer year) {
+		return year >= 1961 && year <= 2022;
+	}
 	public static void main(String[] args)
 	   {
 		//create a VIew object
 		  GWView view = new GWView();
-		  
 	   }
 
 

@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -56,6 +58,9 @@ public class Library implements Calculations{
 			{
 			e.printStackTrace();
 			}
+		
+		Collections.sort(list);
+		
 		this.indexlist = list;
 		return indexlist;
 		}
@@ -112,6 +117,14 @@ public class Library implements Calculations{
 			{
 			e.printStackTrace();
 			}
+		
+		Collections.sort(countrylist, new Comparator<Country>() {
+            @Override
+            public int compare(Country country1, Country country2) {
+                return country1.getName().compareTo(country2.getName());
+            }
+        });
+		
 		this.library1 = countrylist;
 		return this.library1;
 		}
@@ -127,6 +140,12 @@ public class Library implements Calculations{
 		Integer year = library1.get(index).gettempyearhash().get(temp);
 		return year;
 	}
+	
+	public Object getCountry(int index) {
+		Object country = library1.get(index);
+		return country;
+	}
+	
 
 	@Override
 	public Double gethottestTemp(String country) {
