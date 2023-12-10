@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Hashtable;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -32,6 +34,8 @@ public class GWView extends JFrame {
 	private JPanel mainPanel;
 	private JRadioButton radio1;
 	private JRadioButton radio2;
+	private JRadioButton radio3;
+	private JRadioButton radio4;
 	private JComboBox comboBox;
 	private JComboBox comboBox2;
 	private ImageIcon islandimage;
@@ -46,9 +50,11 @@ public class GWView extends JFrame {
 	private JLabel differencenumber;
 	private Double maintempdiff;
 	private String place;
+	private String place1;
 	private Library library = new Library();
 	private String[] list;
 	private JButton submit;
+	private JButton submit1;
 	private JTextField field2;
 	private JTextField field1;
 	
@@ -70,7 +76,7 @@ public class GWView extends JFrame {
 		
 		
 		createleftPanel();
-//		createmiddlePanel();
+		createmiddlePanel();
 //		createrightPanel();
 		
 		Border blackline = BorderFactory.createLineBorder(Color.black);
@@ -89,9 +95,9 @@ public class GWView extends JFrame {
 		
 		islandimage = new ImageIcon(getClass().getResource("islandimage.png"));
 		islandimagebw = new ImageIcon(getClass().getResource("islandimagebw.png"));
-		JLabel image = new JLabel(islandimage);
+		JLabel image = new JLabel(islandimagebw);
 		
-		JLabel caption = new JLabel("This country or territory is an island nation/territory");
+		JLabel caption = new JLabel("This country or territory is not an island nation/territory");
 	
 		JPanel panel1 = new JPanel();
 		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
@@ -169,7 +175,6 @@ public class GWView extends JFrame {
 		comboBox = new JComboBox(list);
 		place = list[0];
 		
-		
 		comboBox.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -177,7 +182,6 @@ public class GWView extends JFrame {
 				if(e.getSource()== comboBox) {
 					place = (String) comboBox.getSelectedItem();
 					int index = library.indexlist.indexOf(place);
-//					Country test = library.getCountry(index);
 					if (library.getCountry(index).getClass() != Island.class) {
 						image.setIcon(islandimagebw);
 						caption.setText("This country or territory is not an island nation/territory");
@@ -270,77 +274,155 @@ public class GWView extends JFrame {
 		
 		
 		
+		
+		
 		leftPanel.add(panel1);
 		
+		
+		
 	}
-//	private void createmiddlePanel() {
-//	
-//	Library june = new Library();
-//	int n = june.indexlist.size();
-//	String[] list = new String[n];
-//	for (int i = 0; i<n; i++) {
-//		list[i] = june.indexlist.get(i);
-//	}
-//	comboBox = new JComboBox(list);
-//	
-//	
-//	JLabel title = new JLabel("HOTTEST AND COLDEST YEAR BY COUNTRY OR TERRITORY");
-//	title.setFont(new Font("Times New Roman", Font.BOLD, 15));
-//	title.setAlignmentX(CENTER_ALIGNMENT);
-//	JLabel instruction = new JLabel("Pick a Country or Territory:");
-//	instruction.setAlignmentX(CENTER_ALIGNMENT);
-//	JLabel hottemp = new JLabel("Hottest Temperature: " + String.valueOf(hottesttemp));
-//	hottemp.setAlignmentX(CENTER_ALIGNMENT);
-//	JLabel year = new JLabel("in the year of "+String.valueOf(yearhot));
-//	year.setAlignmentX(CENTER_ALIGNMENT);
-//	JLabel coldtemp = new JLabel("Coldest Temperature: " + String.valueOf(coldesttemp));
-//	coldtemp.setAlignmentX(CENTER_ALIGNMENT);
-//	JLabel year1 = new JLabel(String.valueOf("in the year of "+ String.valueOf(yearcold)));
-//	year1.setAlignmentX(CENTER_ALIGNMENT);
-//	JButton submit = new JButton("SUBMIT");
-//	submit.setAlignmentX(CENTER_ALIGNMENT);
-//	JRadioButton radio1 = new JRadioButton();
-//	JLabel celsius = new JLabel("Show in Celsius");
-//	JRadioButton radio2 = new JRadioButton();
-//	JLabel fahrenheit = new JLabel("Show in Fahrenheit");
-//	
-//	JPanel panel1 = new JPanel();
-//	panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
-//	
-//	JPanel panel2 = new JPanel();
-//	JPanel panel3 = new JPanel();
-//	
-//	panel1.add(title);	
-//	panel1.add(Box.createRigidArea(new Dimension(0,10)));
-//	panel1.add(instruction);
-//	panel1.add(comboBox);
-//	
-//	panel2.add(radio1);
-//	panel2.add(celsius);
-//	panel3.add(radio2);
-//	panel3.add(fahrenheit);
-//	panel1.add(panel2);
-//	panel1.add(panel3);
-//	panel1.add(Box.createRigidArea(new Dimension(0,10)));
-//	panel1.add(hottemp);
-//	panel1.add(year);
-//	panel1.add(coldtemp);
-//	panel1.add(year1);
-//	panel1.add(Box.createRigidArea(new Dimension(0,15)));
-//	panel1.add(submit);
-//	
-//	centerPanel.add(panel1);
-//
-//}
-//
+	
+	
+	private void createmiddlePanel() {
+		islandimage = new ImageIcon(getClass().getResource("islandimage.png"));
+		islandimagebw = new ImageIcon(getClass().getResource("islandimagebw.png"));
+		JLabel image = new JLabel(islandimagebw);
+		
+		JLabel caption1 = new JLabel("This country or territory is not an island nation/territory");
+
+	int n = library.indexlist.size();
+	String[] list = new String[n];
+	for (int i = 0; i<n; i++) {
+		list[i] = library.indexlist.get(i);
+	}
+	comboBox2 = new JComboBox(list);
+	place1 = list[0];
+	
+	
+	comboBox2.addActionListener(new ActionListener(){
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			if(e.getSource()== comboBox2) {
+				place1 = (String) comboBox2.getSelectedItem();
+				int index = library.indexlist.indexOf(place1);
+				if (library.getCountry(index).getClass() != Island.class) {
+					image.setIcon(islandimagebw);
+					caption1.setText("This country or territory is not an island nation/territory");
+				}
+				else {
+					image.setIcon(islandimage);
+					caption1.setText("This country or territory is an island nation/territory");
+				}
+			}
+		}
+	});
+	
+	JLabel title = new JLabel("HOTTEST AND COLDEST YEAR BY COUNTRY OR TERRITORY");
+	title.setFont(new Font("Times New Roman", Font.BOLD, 15));
+	title.setAlignmentX(CENTER_ALIGNMENT);
+	JLabel instruction = new JLabel("Pick a Country or Territory:");
+	instruction.setAlignmentX(CENTER_ALIGNMENT);
+	JLabel hottemp = new JLabel("Hottest Temperature: " + String.valueOf(hottesttemp));
+	hottemp.setAlignmentX(CENTER_ALIGNMENT);
+	JLabel year = new JLabel("in the year of "+String.valueOf(yearhot));
+	year.setAlignmentX(CENTER_ALIGNMENT);
+	JLabel coldtemp = new JLabel("Coldest Temperature: " + String.valueOf(coldesttemp));
+	coldtemp.setAlignmentX(CENTER_ALIGNMENT);
+	JLabel year1 = new JLabel(String.valueOf("in the year of "+ String.valueOf(yearcold)));
+	year1.setAlignmentX(CENTER_ALIGNMENT);
+	submit1 = new JButton("SUBMIT");
+	submit1.setAlignmentX(CENTER_ALIGNMENT);
+	
+	submit1.addActionListener(new ActionListener(){
+		
+		@Override
+		public void actionPerformed(ActionEvent e)  {
+			System.out.println(place1);
+			int index = library.indexlist.indexOf(place1);
+			Country country = (Country) library.getCountry(index);
+			Hashtable<Integer, Double> yeartemp = country.getyeartemphash();
+			Hashtable<Double, Integer> tempyear = country.gettempyearhash();
+			Double[] tokens = new Double[62];
+			Double celciusYear;
+			
+			for (int i=0, j=1961; i < 63 && j<2023; i++, j++) {
+				tokens[i] = yeartemp.get(j);
+			}
+			
+			Double maxValue = tokens[0];
+			Double minValue = tokens[0];
+			
+			for (int i = 1; i < tokens.length; i++) {
+				if (tokens[i] > maxValue) {
+					hottesttemp = tokens[i];
+					yearhot = tempyear.get(hottesttemp);
+				}
+				if (tokens[i] < minValue) {
+					coldesttemp = tokens[i];
+					yearcold = tempyear.get(coldesttemp);
+				}
+			}
+			
+			if (radio4.isSelected()) {
+				coldesttemp = (coldesttemp * (9/5)) + 32;
+				hottesttemp = (hottesttemp * (9/5)) + 32;
+			}
+			
+			hottemp.setText("Hottest Temperature: " + String.valueOf(hottesttemp));
+			year.setText("in the year of "+String.valueOf(yearhot));
+			coldtemp.setText("Coldest Temperature: " + String.valueOf(coldesttemp));
+			year1.setText("in the year of "+String.valueOf(yearcold));
+			
+		}
+	});
+	
+	
+	radio3 = new JRadioButton();
+	JLabel celsius = new JLabel("Show in Celsius");
+	radio4 = new JRadioButton();
+	JLabel fahrenheit = new JLabel("Show in Fahrenheit");
+	
+	ButtonGroup buttonGroup = new ButtonGroup();
+	buttonGroup.add(radio3);
+	radio3.setSelected(true);
+	buttonGroup.add(radio4);
+	
+	JPanel panel1 = new JPanel();
+	panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
+	
+	
+	JPanel panel4 = new JPanel();
+	JPanel panel2 = new JPanel();
+	panel4.add(image);
+	panel4.add(caption1);
+	JPanel panel3 = new JPanel();
+	
+	panel1.add(title);	
+	panel1.add(Box.createRigidArea(new Dimension(0,10)));
+	panel1.add(instruction);
+	panel1.add(comboBox2);
+	panel1.add(panel4);
+	panel2.add(radio3);
+	panel2.add(celsius);
+	panel3.add(radio4);
+	panel3.add(fahrenheit);
+	panel1.add(panel2);
+	panel1.add(panel3);
+	panel1.add(Box.createRigidArea(new Dimension(0,10)));
+	panel1.add(hottemp);
+	panel1.add(year);
+	panel1.add(coldtemp);
+	panel1.add(year1);
+	panel1.add(Box.createRigidArea(new Dimension(0,15)));
+	panel1.add(submit1);
+	
+	centerPanel.add(panel1);
+
+}
+
 //private void createrightPanel() {
 //	
-//	Library june = new Library();
-//	int n = june.indexlist.size();
-//	String[] list = new String[n];
-//	for (int i = 0; i<n; i++) {
-//		list[i] = june.indexlist.get(i);
-//	}
 //	comboBox2 = new JComboBox(list);
 //	
 //	JLabel title = new JLabel("TEMPERATURE RATE CALCULATOR BY COUNTRY OR TERRITORY");
