@@ -194,7 +194,7 @@ public class Library implements Calculations{
 		Double temp1 = getTemp(country, year1);
 		Double temp2 = getTemp(country, year2);
 		
-		Double change = ((temp1-temp2)/temp1)*100;
+		Double change = ((temp2-temp1)/temp1)*100;
 		
 		
 		return change;
