@@ -31,7 +31,6 @@ public class GWView extends JFrame {
 	private JPanel leftPanel;
 	private JPanel centerPanel;
 	private JPanel rightPanel;
-	private JPanel mainPanel;
 	private JRadioButton radio1;
 	private JRadioButton radio2;
 	private JRadioButton radio3;
@@ -67,22 +66,24 @@ public class GWView extends JFrame {
 
 	public GWView() {
 		
-		
+		//creates Frame
+		//set title bar Text
 		super("Global Warming");
 		setSize(1450, 400);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		//create panels of the JFrame
 		leftPanel = new JPanel();
 		centerPanel = new JPanel();
 		rightPanel = new JPanel();
-		mainPanel = new JPanel();
-		mainPanel.setLayout(new BorderLayout());
 		
-		
+		//calls methods to create left panel, middle panel and right panel
+		//adds panels to Frame
 		createleftPanel();
 		createmiddlePanel();
 		createrightPanel();
 		
+		//creates border line between panels
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		add(leftPanel, BorderLayout.WEST);
 		leftPanel.setBorder(blackline);
@@ -92,31 +93,33 @@ public class GWView extends JFrame {
 		rightPanel.setBorder(blackline);
 		
 		setVisible(true);
+		
+		//restrict user from resizing window of program
+		setResizable(false);
 	
 	}
 	
 	private void createleftPanel() {
 		
-		islandimage = new ImageIcon(getClass().getResource("islandimage.png"));
-		islandimagebw = new ImageIcon(getClass().getResource("islandimagebw.png"));
-		JLabel image = new JLabel(islandimagebw);
+		//get string array of all countries
+				//using library object
+				int n = library.indexlist.size();
+				list = new String[n];
+				for (int i = 0; i<n; i++) {
+					list[i] = library.indexlist.get(i);
+				}
 		
-		JLabel caption = new JLabel("This country or territory is not an island nation/territory");
-	
+		//Create panels as containers for components// 
 		JPanel panel1 = new JPanel();
+		//set layout for panel1 to BoxLayout
 		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
-		
 		JPanel panel2 = new JPanel();
-		
 		JPanel panel3 = new JPanel();
-		panel3.setLayout(new FlowLayout());
-		
 		JPanel panel4 = new JPanel();
-		
 		JPanel panel5 = new JPanel();
-		panel5.setLayout(new FlowLayout());
 		
-		//PANEL 1
+		//**PANEL 1**//
+		//create components for panel1
 		JLabel title = new JLabel("TEMPERATURE DIFFERENCE CALCULATOR BY YEAR");
 		title.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		title.setAlignmentX(CENTER_ALIGNMENT);
@@ -128,13 +131,45 @@ public class GWView extends JFrame {
 		year1.setAlignmentX(CENTER_ALIGNMENT);
 		JLabel year2 = new JLabel("Year 2");
 		year2.setAlignmentX(CENTER_ALIGNMENT);
-		
 		field1 = new JTextField("");
-		field1.setPreferredSize(new Dimension (100, 30));
 		field2 = new JTextField("");
-		field2.setPreferredSize(new Dimension (100,30));
+		comboBox = new JComboBox(list);
+		//sets comboBox selection to the first option
+		place = list[0];
 		
-		 field1.getDocument().addDocumentListener(new DocumentListener() {
+		//**PANEL 2**//
+		//create components for panel2
+		submit = new JButton("SUBMIT");
+		submit.setEnabled(false);
+		
+		//**PANEL 3**//
+		//create components for panel 3
+		JLabel difference = new JLabel("Difference in temperature:");
+		differencenumber = new JLabel(String.valueOf(maintempdiff));
+		
+		//**PANEL 4**//
+		radio1 = new JRadioButton();
+		JLabel celsius = new JLabel("Show in Celsius");
+		radio2 = new JRadioButton();
+		JLabel fahrenheit = new JLabel("Show in Fahrenheit");
+		//create buttongroup and add radiobuttons to have 
+		//only 1 radio button selected at a time
+		ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup.add(radio1);
+		radio1.setSelected(true);
+		buttonGroup.add(radio2);
+				
+		//**PANEL 5**//
+		//creates imageicon object from png 
+		islandimage = new ImageIcon(getClass().getResource("islandimage.png"));
+		islandimagebw = new ImageIcon(getClass().getResource("islandimagebw.png"));
+		//add image to a label
+		JLabel image = new JLabel(islandimagebw);
+		JLabel caption = new JLabel("This country or territory is not an island nation/territory");
+	
+		//checks any changes in field1
+		//if empty or does not adhere to number req, submit button not enabled
+		field1.getDocument().addDocumentListener(new DocumentListener() {
 		        @Override
 		        public void insertUpdate(DocumentEvent e) {
 		            updateSubmitButtonState();
@@ -151,6 +186,8 @@ public class GWView extends JFrame {
 		        }
 		    });
 		 
+		//checks any changes in field2
+		//if empty or does not adhere to number req, submit button not enabled
 		 field2.getDocument().addDocumentListener(new DocumentListener() {
 		        @Override
 		        public void insertUpdate(DocumentEvent e) {
@@ -167,25 +204,19 @@ public class GWView extends JFrame {
 		            
 		        }
 		    });
-
-		//get string array of all countries
-		//using library object
 		
-		int n = library.indexlist.size();
-		list = new String[n];
-		for (int i = 0; i<n; i++) {
-			list[i] = library.indexlist.get(i);
-		}
-		comboBox = new JComboBox(list);
-		place = list[0];
-		
+		//adds action listener to the comboBox
 		comboBox.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				//assigns item selected to the place
 				if(e.getSource()== comboBox) {
 					place = (String) comboBox.getSelectedItem();
 					int index = library.indexlist.indexOf(place);
+					
+					//checks if place is island or not
+					//if island, image is colored and caption updates saying it is island
+					//if not island, image is B&W and caption updates saying it is not an island
 					if (library.getCountry(index).getClass() != Island.class) {
 						image.setIcon(islandimagebw);
 						caption.setText("This country or territory is not an island nation/territory");
@@ -198,77 +229,53 @@ public class GWView extends JFrame {
 			}
 		});
 		
-		
-		submit = new JButton("SUBMIT");
-		submit.setEnabled(false);
+		//adds action listener to the submit button
 		submit.addActionListener(new ActionListener(){
-		
 			@Override
 			public void actionPerformed(ActionEvent e)  {
-				System.out.println(place);
 				
+				//assigns the year entered on field1 and field2 
+				//as year1 and year2 respectively
 				Integer year1 = Integer.valueOf(field1.getText());
 				Integer year2 = Integer.valueOf(field2.getText());
 				
+				//checks if year1 or year2 adhere to requirements (1961-2022) 
+				//cannot be empty
+				//if not between 1961-2022 or empty, button is disabled
 				if (!isValidYear(year1) || !isValidYear(year2)) {
 					submit.setEnabled(false);
+					//if years are valid
+					//main temp difference is calculated
 					}else {
 						maintempdiff = library.getTemp(place, year1) - library.getTemp(place, year2);
 					}
 				
+				//if radio2 (fahrenheit) selected, temp difference is converted 
 				if (radio2.isSelected()) {
 					maintempdiff = (maintempdiff * (9/5)) + 32;
 				}
 				
+				//difference number label updated to maintempdiff
 				differencenumber.setText(String.valueOf(maintempdiff));
 			}
 			
 		});
 		
-		
-		
-		//PANEL 3
-		JLabel difference = new JLabel("Difference in temperature:");
-		differencenumber = new JLabel(String.valueOf(maintempdiff));
-		
-		//PANEL 4 - for radio buttons
-		radio1 = new JRadioButton();
-		JLabel celsius = new JLabel("Show in Celsius");
-		radio2 = new JRadioButton();
-		JLabel fahrenheit = new JLabel("Show in Fahrenheit");
-		ButtonGroup buttonGroup = new ButtonGroup();
-		buttonGroup.add(radio1);
-		radio1.setSelected(true);
-		buttonGroup.add(radio2);
-		
+		//add components or panels in order
 		panel1.add(title);
-		
 		panel1.add(Box.createRigidArea(new Dimension(0,10)));
-		
 		panel1.add(instruction);
-		
 		panel1.add(comboBox);
-		
 		panel1.add(panel5);
-		
 		panel1.add(instruction2);
-	
 		panel1.add(year1);
-	
 		panel1.add(field1);
-		
 		panel1.add(year2);
-		
 		panel1.add(field2);
-		
 		panel1.add(panel3);
-		
 		panel1.add(panel4);
-		
-		panel2.add(submit);
-		
 		panel1.add(panel2);
-		
+		panel2.add(submit);
 		panel3.add(difference);
 		panel3.add(differencenumber);
 		panel4.add(radio1);
@@ -278,29 +285,24 @@ public class GWView extends JFrame {
 		panel5.add(image);
 		panel5.add(caption);
 		
-		
-		
-		
-		
+		//panel 1 = mainpanel
+		//add panel1 to left panel
 		leftPanel.add(panel1);
 		
-		
-		
 	}
-	
 	
 	private void createmiddlePanel() {
-		islandimage = new ImageIcon(getClass().getResource("islandimage.png"));
-		islandimagebw = new ImageIcon(getClass().getResource("islandimagebw.png"));
-		JLabel image = new JLabel(islandimagebw);
 		
-		JLabel caption1 = new JLabel("This country or territory is not an island nation/territory");
+	//create panels
+	
+		
+	islandimage = new ImageIcon(getClass().getResource("islandimage.png"));
+	islandimagebw = new ImageIcon(getClass().getResource("islandimagebw.png"));
+	JLabel image = new JLabel(islandimagebw);
+		
+	JLabel caption1 = new JLabel("This country or territory is not an island nation/territory");
 
-	int n = library.indexlist.size();
-	String[] list = new String[n];
-	for (int i = 0; i<n; i++) {
-		list[i] = library.indexlist.get(i);
-	}
+	
 	comboBox2 = new JComboBox(list);
 	place1 = list[0];
 	
@@ -562,7 +564,7 @@ public class GWView extends JFrame {
 	
 	rightPanel.add(panel1);
 }
-	
+	//checks if fields are empty or number is 1961 - 2022
 	private void updateSubmitButtonState() {
 		
 		 try {
@@ -580,8 +582,8 @@ public class GWView extends JFrame {
 		
 	}
 	
+	//checks if fields are empty or number is 1961 - 2022
 	private void updateSubmitButtonState2() {
-		
 		 try {
 		        int year1 = Integer.parseInt(field3.getText());
 		        int year2 = Integer.parseInt(field4.getText());
@@ -594,12 +596,13 @@ public class GWView extends JFrame {
 		        // Handle the case where the input is not a valid integer
 		        submit2.setEnabled(false);
 		    }
-		
 	}
-
+	
+	//checks that year is between 1961 and 2022
 	private boolean isValidYear(Integer year) {
 		return year >= 1961 && year <= 2022;
 	}
+	
 	public static void main(String[] args)
 	   {
 		//create a VIew object
