@@ -373,6 +373,8 @@ public class GWView extends JFrame {
 				Country country = (Country) library.getCountry(index);
 				Hashtable<Integer, Double> yeartemp = country.getyeartemphash();
 				Hashtable<Double, Integer> tempyear = country.gettempyearhash();
+				int yearhot = 0;
+				int yearcold = 0;
 				Double[] tokens = new Double[62];
 				Double celciusYear;
 				
@@ -389,10 +391,16 @@ public class GWView extends JFrame {
 				//finds the years when those temp occured
 				for (int i = 1; i < tokens.length; i++) {
 					if (tokens[i] > maxValue) {
+						maxValue = tokens[i];
 						hottesttemp = tokens[i];
 						yearhot = tempyear.get(hottesttemp);
+						System.out.println(tokens[i]);
 					}
+				}
+				
+				for (int i = 1; i < tokens.length; i++) {
 					if (tokens[i] < minValue) {
+						minValue = tokens[i];
 						coldesttemp = tokens[i];
 						yearcold = tempyear.get(coldesttemp);
 					}
